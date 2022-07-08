@@ -1,0 +1,28 @@
+{
+  "name": "webpack-tuning",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "ofuji-works.github.com:ofuji-works/webpack-tuning.git",
+  "author": "ofuji-works <ofuji.works@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "webpack serve",
+    "build": "webpack --config webpack.config.js"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "html-loader": "^3.1.2",
+    "html-webpack-plugin": "^5.5.0",
+    "terser-webpack-plugin": "^5.3.3",
+    "ts-loader": "^9.3.1",
+    "webpack": "^5.73.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.9.3"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^4.7.4"
+  }
+}
