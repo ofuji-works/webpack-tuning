@@ -7,19 +7,16 @@ const dist = path.resolve(__dirname, 'dist')
 module.exports = {
     entry: './src/index.tsx',
     output: {
-        filename: 'main.js',
+        filename: '[name].js',
         path: dist
     },
-    devServer: {
-        static: { directory: dist},
-        port: 3000
-    },
-    mode: 'development',
+    mode: 'production',
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
-                use: "ts-loader"
+                use: "ts-loader",
+                exclude: /node_modules/,
             },
             {
                 test: /\.html?$/,
@@ -27,14 +24,41 @@ module.exports = {
             }
         ]
     },
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js'],
+    },
     plugins: [
         new HtmlWebpackPlugin({
             template: './public/index.html',
             filename: 'index.html'
         })
     ],
-    "optimization": {
+    optimization: {
+        splitChunks: {
+            chunks: 'initial',
+            cacheGroups: {
+                vendor: {
+                    name() {return 'vendor'},
+                    test: /[\\/]node_modules[\\/]/,
+                    reuseExistingChunk: true,
+                },
+                default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true,
+                },
+            }
+        },
         minimize: true,
         minimizer: [new TerserWebpackPlugin()]
+    }
+}
+
+if (process.env.NODE_ENV !== 'production') {
+    module.exports.mode = 'development'
+    module.exports.devtool = 'inline-source-map';
+    module.exports.devServer = {
+        static: { directory: dist},
+        port: 3000
     }
 }
