@@ -10,7 +10,7 @@ module.exports = {
         filename: '[name].js',
         path: dist
     },
-    mode: 'production',
+    mode: process.env.NODE_ENV,
     module: {
         rules: [
             {
@@ -34,11 +34,19 @@ module.exports = {
         })
     ],
     optimization: {
+        runtimeChunk: 'single',
         splitChunks: {
-            chunks: 'initial',
+            chunks: 'all',
+            minSize: 20000,
+            minChunks: 1,
+            maxAsyncRequests: 30,
+            maxInitialRequests: 30,
             cacheGroups: {
                 vendor: {
-                    name() {return 'vendor'},
+                    name(module) {
+                        const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+                        return `vendor-${packageName.replace('@', '')}`;
+                    },
                     test: /[\\/]node_modules[\\/]/,
                     reuseExistingChunk: true,
                 },
@@ -50,12 +58,11 @@ module.exports = {
             }
         },
         minimize: true,
-        minimizer: [new TerserWebpackPlugin()]
+        minimizer: [new TerserWebpackPlugin()],
     }
 }
 
 if (process.env.NODE_ENV !== 'production') {
-    module.exports.mode = 'development'
     module.exports.devtool = 'inline-source-map';
     module.exports.devServer = {
         static: { directory: dist},
