@@ -10,7 +10,8 @@ module.exports = {
         filename: '[name].js',
         path: dist
     },
-    mode: process.env.NODE_ENV,
+    // mode: process.env.NODE_ENV,
+    mode: 'none',
     module: {
         rules: [
             {
@@ -57,8 +58,11 @@ module.exports = {
                 },
             }
         },
-        minimize: true,
-        minimizer: [new TerserWebpackPlugin()],
+        // minimize: true,
+        // minimizer: [new TerserWebpackPlugin()],
+        providedExports: true,
+        usedExports: true,
+        mangleExports: "deterministic",
     }
 }
 
